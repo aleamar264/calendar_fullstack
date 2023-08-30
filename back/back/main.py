@@ -1,9 +1,14 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from back.calendar.route import calendar
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Calendar XXX",
+    description="""Calendar to queue task on background using
+        APSchedule using date to run only one""",
+    version='0.0.0'
+)
 
 origin = [
     '*'
@@ -22,3 +27,6 @@ async def main():
     return {"message":"I'm working"}
 
 app.include_router(calendar)
+
+def my_task():
+    print("Scheduled task executed!")

@@ -6,7 +6,7 @@ class DatetimeModel(BaseModel):
 
 class ReserveModel(BaseModel):
     summary: str
-    location: str #look how to reserve a room (like location)
+    location: str | None = None #look how to reserve a room (like location)
     start: DatetimeModel
     end: DatetimeModel
     attendees: list[dict[str,EmailStr]] | None = None

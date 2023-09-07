@@ -5,12 +5,14 @@ from dateutil.relativedelta import relativedelta
 from tzlocal import get_localzone_name
 from back.functions.date_time_util import to_localized_iso
 
+from fastapi.responses import JSONResponse
+
 service = get_calendar_service()
 
 def create_event(template: dict, calendar_id:str = 'primary'):
     """
     The function creates an event in a Google Calendar using a provided template.
-    
+
     :param template: The `template` parameter is a dictionary that contains the details of the event you
     want to create. It should include properties such as `summary` (event title), `start` (event start
     time), `end` (event end time), and any other relevant information
@@ -29,10 +31,10 @@ def create_event(template: dict, calendar_id:str = 'primary'):
     except Exception as e:
         return response_json(message=e.message, status=500)
 
-def get_event(event_id: str, calendar_id:str = 'primary'):
+def get_event(event_id: str, calendar_id:str = 'primary') -> dict | JSONResponse:
     """
     The function `get_event` retrieves a specific event from a calendar using its event ID.
-    
+
     :param event_id: The `event_id` parameter is a string that represents the unique identifier of the
     event you want to retrieve from the calendar
     :type event_id: str
@@ -53,7 +55,7 @@ def get_event(event_id: str, calendar_id:str = 'primary'):
 def delete_event(event_id: str, calendar_id:str = 'primary'):
     """
     The function `delete_event` deletes an event from a calendar using the Google Calendar API.
-    
+
     :param event_id: The event_id parameter is a string that represents the unique identifier of the
     event that you want to delete from the calendar
     :type event_id: str
@@ -70,13 +72,13 @@ def delete_event(event_id: str, calendar_id:str = 'primary'):
         return response
     except Exception as e:
         return response_json(message=e.message, status=500)
-    
-def update_event(event_id: str, 
+
+def update_event(event_id: str,
                  template: dict,
                  calendar_id:str = 'primary'):
     """
     The function `update_event` updates an event in a calendar using the Google Calendar API.
-    
+
     :param event_id: The event_id parameter is a string that represents the unique identifier of the
     event that you want to update in the calendar. This identifier is typically obtained when creating
     or retrieving an event from the calendar
@@ -99,7 +101,7 @@ def update_event(event_id: str,
         return response
     except Exception as e:
         return response_json(message=e.message, status=500)
-    
+
 def get_list_event(calendar_id:str = 'primary',
                     time_min: date| datetime | str= None,
                     time_max: date| datetime | str= None,
@@ -108,7 +110,7 @@ def get_list_event(calendar_id:str = 'primary',
     """
     The function `get_list_event` retrieves a list of events from a calendar within a specified time
     range.
-    
+
     :param calendar_id: The calendar ID is a unique identifier for a specific calendar. It can be the
     primary calendar of a user or a specific calendar created by the user. By default, the value is set
     to 'primary', which refers to the primary calendar of the authenticated user, defaults to primary
@@ -139,7 +141,7 @@ def get_list_event(calendar_id:str = 'primary',
 
     page_token = None
     while True:
-        events = service.events().list(calendarId=calendar_id, 
+        events = service.events().list(calendarId=calendar_id,
                                        pageToken=page_token,
                                        timeMin=time_min,
                                        timeMax=time_max,

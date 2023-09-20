@@ -11,8 +11,9 @@ app = FastAPI(
 )
 
 origin = [
-    '*'
-    ]
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,11 +23,13 @@ app.add_middleware(
     allow_headers=['*']
 )
 
+
 @app.get('/')
 async def main():
-    return {"message":"I'm working"}
+    return {"message": "I'm working"}
 
 app.include_router(calendar)
+
 
 def my_task():
     print("Scheduled task executed!")
